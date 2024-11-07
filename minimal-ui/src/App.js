@@ -1,6 +1,7 @@
 // minimal-ui/src/App.js
 
 import React, { useState } from 'react';
+import Header from './Header'; // Import the Header component
 
 function App() {
   const [data, setData] = useState(''); // State to store API response
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h1>Minimal-ui</h1>
+      <Header /> {/* Use the Header component */}
       <button 
         onClick={fetchData} 
         style={{

@@ -9,6 +9,14 @@ namespace SampleAPI
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    policy => policy.WithOrigins("http://localhost:3000") // React dev server URL
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +35,7 @@ namespace SampleAPI
 
             app.UseAuthorization();
 
+            app.UseCors("AllowReactApp");
 
             app.MapControllers();
 

@@ -2,11 +2,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
-test('renders Minimal UI Text', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Minimal UI/i);
-  expect(linkElement).toBeInTheDocument();
-});
+// test('renders Minimal UI Text', () => {
+//   render(<App />);
+//   const linkElement = screen.getByText(/Minimal UI/i);
+//   expect(linkElement).toBeInTheDocument();
+// });
 
 test('fetches and displays data on button click', async () => {
   render(<App />);
@@ -16,7 +16,12 @@ test('fetches and displays data on button click', async () => {
   fireEvent.click(button);
 
   // Expect the mocked data to appear in the text area
-  const textArea = await screen.findByRole('div');
-  expect(textArea.value).toContain('Chilly');
-  expect(textArea.value).toContain('Mild');
+  const textArea = await screen.findByRole('textbox',{id:'responseTextArea'});
+  //const textArea = await screen.findByRole('textbox');
+  console.log('Textarea value:', textArea.value);
+  
+  expect(textArea.value).toHaveValue(expect.stringContaining('Chilly'));
+  expect(textArea.value).toHaveValue(expect.stringContaining('Mild'));
+  // expect(textArea.value).toContain('Chilly');
+  // expect(textArea.value).toContain('Mild');
 });

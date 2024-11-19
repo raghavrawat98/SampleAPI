@@ -34,6 +34,7 @@ function App() {
         GET
       </button>
       <textarea
+      id="responseTextArea"
         style={{
           width: '80%',
           height: '300px',

@@ -1,4 +1,6 @@
 
+using SampleAPI.RepoPatternForMultipleDB;
+
 namespace SampleAPI
 {
     public class Program
@@ -21,6 +23,16 @@ namespace SampleAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Conditional registration of DBService
+            if (builder.Configuration["UseDatabase"] == "SQLServer")
+            {
+                builder.Services.AddScoped<IDBService, SQLServerDBService>();
+            }
+            else if (builder.Configuration["UseDatabase"] == "Redis")
+            {
+                builder.Services.AddScoped<IDBService, RedisDBService>();
+            }
 
             var app = builder.Build();
 

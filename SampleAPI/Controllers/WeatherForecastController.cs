@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SampleAPI.RepoPatternForMultipleDB;
 
 namespace SampleAPI.Controllers
 {
@@ -6,6 +7,7 @@ namespace SampleAPI.Controllers
     [Route("api/[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly IDBService _dbService;
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -13,9 +15,13 @@ namespace SampleAPI.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(
+            ILogger<WeatherForecastController> logger, 
+            IDBService dbService
+            )
         {
             _logger = logger;
+            _dbService = dbService;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -29,6 +35,18 @@ namespace SampleAPI.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet(Name = "GetOrders")]
+        public async Task<IActionResult> GetOrders(int orderID)
+        {
+            var repository = _dbService.GetOrderRepository();
+            var order = await repository.GetOrderAsync(orderID);
+
+            if (order == null)
+                return NotFound();
+
+            return Ok(order);
         }
     }
 }
